@@ -1,7 +1,7 @@
 # Picking up Excalibook
 
-**Next (2026-10-02):** 0.1.0 is released and listed for review on
-googlebook.studio (pending Alexander). Next: pick from "Deferred" and
+**Next (2026-10-02):** 0.1.0 is released; the googlebook.studio listing is
+submitted (kuscher/googlebook-tech-listings#2) and waits on Alexander. Next: pick from "Deferred" and
 "Ideas" below for 0.2.
 
 ## Status
@@ -59,4 +59,3 @@ googlebook.studio (pending Alexander). Next: pick from "Deferred" and
   shifted "S"); Excalibook binds it itself. Drop that when Excalidraw fixes it.
 - Remember the last file across restarts (persisted URI permission plus a
   handle rebuilt at startup).
-- Listing on googlebook.studio once the repo is public.
