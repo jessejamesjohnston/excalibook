@@ -1,0 +1,69 @@
+{
+  "_comment": "Every font folder Excalidraw ships (assets/web/fonts/<dir>). tools/licenses.py fails the build on a folder that isn't listed here; tools/fonts.py fails it on a file whose family name doesn't start with the folder's \"family\". Copyright lines are the fonts' own (name table, ID 0).",
+  "Assistant": {
+    "name": "Assistant",
+    "license": "OFL-1.1",
+    "copyright": "Copyright 2020 The Assistant Project Authors (https://github.com/hafontia/Assistant). Copyright 2010 The Source Sans Pro Project Authors.",
+    "source": "https://github.com/hafontia/Assistant",
+    "family": "Assistant"
+  },
+  "Cascadia": {
+    "name": "Cascadia Code",
+    "license": "OFL-1.1",
+    "copyright": "Copyright (c) 2020 Microsoft Corporation.",
+    "source": "https://github.com/microsoft/cascadia-code",
+    "family": "Cascadia Code"
+  },
+  "ComicShanns": {
+    "name": "Comic Shanns",
+    "license": "MIT",
+    "copyright": "Copyright (c) 2018 Shannon Miwa\nCopyright (c) 2023 Jesus Gonzalez\nCopyright (c) 2023 Rodrigo Batista de Moraes\nCopyright (c) 2024 Fini Jastrow\nCopyright (c) 2024 Kyle Beechly",
+    "source": "https://github.com/shannpersand/comic-shanns",
+    "family": "Comic Shanns"
+  },
+  "Excalifont": {
+    "name": "Excalifont",
+    "license": "MIT",
+    "copyright": "Copyright (c) 2024 by Excalidraw.",
+    "note": "Ships inside Excalidraw's MIT-licensed package and repository (packages/excalidraw/fonts).",
+    "source": "https://github.com/excalidraw/excalidraw",
+    "family": "Excalifont"
+  },
+  "Liberation": {
+    "name": "Liberation Sans 2.1.5",
+    "license": "OFL-1.1",
+    "copyright": "Digitized data copyright (c) 2010 Google Corporation with Reserved Font Arimo, Tinos and Cousine.\nCopyright (c) 2012 Red Hat, Inc. with Reserved Font Name Liberation.",
+    "note": "Excalidraw ships Liberation Sans 1.05 (GPL-2.0 with a font exception). Excalibook replaces it with Liberation Sans 2.1.5, the OFL release with the same metrics (tools/fonts.py).",
+    "source": "https://github.com/liberationfonts/liberation-fonts/releases/tag/2.1.5",
+    "text": "liberation-fonts-2.1.5.txt",
+    "family": "Liberation Sans"
+  },
+  "Lilita": {
+    "name": "Lilita One",
+    "license": "OFL-1.1",
+    "copyright": "Copyright (c) 2011 Juan Montoreano (juan@remolacha.biz), with Reserved Font Names \"Lilita One\".",
+    "source": "https://fonts.google.com/specimen/Lilita+One",
+    "family": "Lilita One"
+  },
+  "Nunito": {
+    "name": "Nunito",
+    "license": "OFL-1.1",
+    "copyright": "Copyright 2014 The Nunito Project Authors (https://github.com/googlefonts/nunito).",
+    "source": "https://github.com/googlefonts/nunito",
+    "family": "Nunito"
+  },
+  "Virgil": {
+    "name": "Virgil",
+    "license": "OFL-1.1",
+    "copyright": "Copyright (c) 2011 by Your Own Font Foundry.",
+    "source": "https://github.com/excalidraw/virgil",
+    "family": "Virgil"
+  },
+  "Xiaolai": {
+    "name": "Xiaolai SC",
+    "license": "OFL-1.1",
+    "copyright": "Copyright (c) 2020 LXGW.",
+    "source": "https://github.com/lxgw/kose-font",
+    "family": "Xiaolai"
+  }
+}

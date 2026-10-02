@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <!-- DayNight, so the page's prefers-color-scheme follows the system: a
+       first drawing opens in the system's light or dark theme. -->
+  <style name="Theme.Excalibook" parent="@android:style/Theme.DeviceDefault.DayNight">
+    <item name="android:windowActionBar">false</item>
+    <item name="android:windowNoTitle">true</item>
+    <item name="android:windowBackground">@color/window</item>
+    <item name="android:colorBackground">@color/window</item>
+    <item name="android:statusBarColor">@color/window</item>
+    <item name="android:navigationBarColor">@color/window</item>
+  </style>
+</resources>

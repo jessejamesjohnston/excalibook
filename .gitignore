@@ -1,0 +1,8 @@
+build/
+web/node_modules/
+web/dist/
+executables/*.apk
+.local/
+*.jks
+*.idsig
+__pycache__/

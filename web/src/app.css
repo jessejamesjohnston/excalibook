@@ -1,0 +1,62 @@
+/* SPDX-License-Identifier: MIT */
+html, body, #root {
+  margin: 0;
+  height: 100%;
+  overflow: hidden;
+  overscroll-behavior: none;
+}
+body {
+  font-family: system-ui, sans-serif;
+}
+.xb-logo {
+  font-family: Excalifont, Virgil, system-ui, sans-serif;
+  font-size: 2.6rem;
+  color: var(--color-primary, #6965db);
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+.xb-about {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.45);
+}
+.xb-about__panel {
+  width: min(760px, calc(100vw - 48px));
+  height: min(640px, calc(100vh - 48px));
+  display: flex;
+  flex-direction: column;
+  border-radius: 12px;
+  overflow: hidden;
+  background: var(--island-bg-color, #fff);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.35);
+}
+.xb-about__bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 14px;
+  font-weight: 600;
+  color: var(--text-primary-color, #1b1b1f);
+  border-bottom: 1px solid var(--default-border-color, #ddd);
+}
+.xb-about__bar button {
+  font: inherit;
+  font-weight: 500;
+  border: 1px solid var(--default-border-color, #ccc);
+  background: transparent;
+  color: inherit;
+  border-radius: 8px;
+  padding: 4px 12px;
+  cursor: pointer;
+}
+.xb-about iframe {
+  flex: 1;
+  border: 0;
+  width: 100%;
+  background: #fff;
+}

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <string name="app_name">Excalibook</string>
+  <string name="saved">Saved %1$s to Download</string>
+  <string name="open">Open</string>
+  <string name="show">Show</string>
+  <string name="save_failed">Couldn\'t save %1$s</string>
+  <string name="cant_read">Couldn\'t read a file you opened with Excalibook</string>
+  <string name="no_app">No app can open that</string>
+  <string name="too_large">%1$s is too large to open in Excalibook (over 100 MB)</string>
+  <string name="file_error">Something went wrong reading or saving a file</string>
+  <string name="renderer_gone">The drawing used too much memory and was reloaded</string>
+</resources>

@@ -1,0 +1,84 @@
+#!/usr/bin/env bash
+# SPDX-License-Identifier: MIT
+# Dev helper for Excalibook: build, install and test the app over adb.
+# Adapted from PDF Toolbox's ./ptb (copyright (c) 2026 the PDF Toolbox authors, MIT).
+#
+#   ./xb app                  build, install and launch
+#   ./xb install | start | stop | logs [N]
+#   ./xb debug CMD            dump | reload | crash | devtools on|off
+#   ./xb cdp ...              DevTools on the app's WebView (tools/cdp.py)
+#   ./xb incoming FILE...     hand files to the app as if opened with it (they
+#                             are saved to Download/ first)
+#   ./xb share                copy the APK to the device's Download folder
+#   ./xb live-resize [on|off|status]
+#                             resize the window live instead of under a veil
+#   ./xb smoke                the end-to-end checks over DevTools (tools/smoke.py)
+#
+# Uses whatever `adb` is first on PATH. From a machine other than the
+# Googlebook, put a wrapper first that runs its adb over ssh. On a Googlebook's own
+# Linux terminal, adb's server must not listen on tcp:5037 (the Terminal
+# forwards every TCP port to Android): use VSCodeBook's Unix-socket setup.
+set -euo pipefail
+cd "$(dirname "$(readlink -f "$0")")"
+TMP=${XDG_RUNTIME_DIR:-${TMPDIR:-/tmp}}
+PKG=com.merrimentlabs.excalibook
+export CDP_PKG=$PKG CDP_SOCK=${CDP_SOCK:-$TMP/excalibook-devtools-$(id -u).sock}
+A=(adb ${ADB_SERIAL:+-s "$ADB_SERIAL"})
+VERSION=$(sed -n 's/.*versionName="\([^"]*\)".*/\1/p' AndroidManifest.xml)
+
+install() { "${A[@]}" install -r build/Excalibook.apk; }
+start() { "${A[@]}" shell am start --user current -n $PKG/.MainActivity >/dev/null; }
+
+share() { # MediaStore Downloads of the current Android user
+  local apk=build/Excalibook.apk name=Excalibook-$VERSION.apk user tmp id
+  [[ -f $apk ]] || { echo "no $apk: ./build.sh first"; exit 1; }
+  user=$("${A[@]}" shell am get-current-user | tr -d '\r'); tmp=/data/local/tmp/$name
+  "${A[@]}" push "$apk" "$tmp" >/dev/null
+  "${A[@]}" shell content insert --user "$user" --uri content://media/external/downloads \
+    --bind _display_name:s:"$name" --bind mime_type:s:application/vnd.android.package-archive
+  id=$("${A[@]}" shell content query --user "$user" --uri content://media/external/downloads \
+    --projection _id --where "\"_display_name='$name'\"" | grep -o '_id=[0-9]*' | tail -1 | cut -d= -f2)
+  [[ -n $id ]] || { echo "could not create Download/$name"; exit 1; }
+  "${A[@]}" shell "content write --user $user --uri content://media/external/downloads/$id < $tmp"
+  "${A[@]}" shell rm -f "$tmp"
+  echo "Download/$name on the device"
+}
+
+debug() {
+  local cmd=$1; shift || true
+  local args=(--es cmd "$cmd")
+  [[ $cmd == devtools ]] && args+=(--ez on "$([[ ${1:-on} == on ]] && echo true || echo false)")
+  "${A[@]}" shell am broadcast -a $PKG.DEBUG -p $PKG "${args[@]}" >/dev/null
+  if [[ $cmd == dump ]]; then
+    sleep 1
+    "${A[@]}" logcat -d -s Excalibook:I | grep -E "state |page ready" | tail -3
+  fi
+}
+
+case ${1:-} in
+  app) ./build.sh && install && start ;;
+  install) install ;;
+  start) start ;;
+  stop) "${A[@]}" shell am force-stop --user current $PKG ;;
+  logs) "${A[@]}" logcat -d -s Excalibook:* chromium:* cr_*:* | tail -"${2:-60}" ;;
+  share) share ;;
+  incoming)
+    shift
+    for f in "$@"; do
+      "${A[@]}" shell am broadcast -a $PKG.DEBUG -p $PKG --es cmd incoming \
+        --es name "'$(basename "$f")'" --es b64 "$(base64 -w0 "$f")" >/dev/null
+    done ;;
+  debug) shift; debug "$@" ;;
+  live-resize)
+    case ${2:-on} in
+      on) "${A[@]}" shell am compat enable ENABLE_FLUID_RESIZING $PKG ;;
+      off) "${A[@]}" shell am compat reset ENABLE_FLUID_RESIZING $PKG ;;
+      status)
+        "${A[@]}" shell dumpsys platform_compat | grep 'name=ENABLE_FLUID_RESIZING;' |
+          grep -q "[{ ]$PKG=true" && echo on || echo off ;;
+      *) echo "usage: ./xb live-resize [on|off|status]" >&2; exit 2 ;;
+    esac ;;
+  cdp) shift; python3 tools/cdp.py "$@" ;;
+  smoke) shift; python3 tools/smoke.py "$@" ;;
+  *) sed -n '3,22p' "$0"; exit 1 ;;
+esac

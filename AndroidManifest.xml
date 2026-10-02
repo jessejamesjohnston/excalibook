@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- No INTERNET permission: Excalidraw runs entirely from the APK, so your
+     drawings never leave the device. -->
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.merrimentlabs.excalibook"
+    android:versionCode="1"
+    android:versionName="0.1.0">
+
+  <uses-sdk android:minSdkVersion="34" android:targetSdkVersion="37" />
+
+  <application
+      android:label="@string/app_name"
+      android:icon="@mipmap/ic_launcher"
+      android:theme="@style/Theme.Excalibook"
+      android:largeHeap="true"
+      android:allowBackup="false">
+
+    <activity
+        android:name=".MainActivity"
+        android:exported="true"
+        android:launchMode="singleTask"
+        android:resizeableActivity="true"
+        android:configChanges="orientation|screenSize|screenLayout|smallestScreenSize|keyboard|keyboardHidden|navigation|density|uiMode|fontScale|locale|layoutDirection">
+      <!-- Googlebook OS picks the size a window opens at itself; other
+           desktop modes take this share of the screen. -->
+      <layout
+          android:defaultWidth="80%"
+          android:defaultHeight="85%"
+          android:minWidth="560dp"
+          android:minHeight="420dp" />
+      <intent-filter>
+        <action android:name="android.intent.action.MAIN" />
+        <category android:name="android.intent.category.LAUNCHER" />
+      </intent-filter>
+      <!-- Open with Excalibook: Excalidraw's own files, matched by name.
+           Android has no MIME type for .excalidraw, so Files hands them over
+           as application/octet-stream (some providers say JSON). Matching
+           that type would put Excalibook on every unknown file; matching the
+           name ending (pathSuffix, API 31+) on any type claims only these:
+           .excalidraw drawings, .excalidrawlib libraries, and the
+           .excalidraw.png / .excalidraw.svg exports with the drawing
+           embedded. As the only app that matches, Excalibook opens them
+           straight away, without a chooser. Providers whose URIs don't end
+           in the file name (MediaStore ids) can't be matched this way; the
+           two Excalidraw MIME types cover a provider that knows them. -->
+      <intent-filter>
+        <action android:name="android.intent.action.VIEW" />
+        <action android:name="android.intent.action.EDIT" />
+        <category android:name="android.intent.category.DEFAULT" />
+        <category android:name="android.intent.category.BROWSABLE" />
+        <data android:scheme="content" />
+        <data android:host="*" />
+        <data android:mimeType="*/*" />
+        <data android:pathSuffix=".excalidraw" />
+        <data android:pathSuffix=".excalidrawlib" />
+        <data android:pathSuffix=".excalidraw.png" />
+        <data android:pathSuffix=".excalidraw.svg" />
+      </intent-filter>
+      <intent-filter>
+        <action android:name="android.intent.action.VIEW" />
+        <action android:name="android.intent.action.EDIT" />
+        <category android:name="android.intent.category.DEFAULT" />
+        <data android:scheme="content" />
+        <data android:mimeType="application/vnd.excalidraw+json" />
+        <data android:mimeType="application/vnd.excalidrawlib+json" />
+      </intent-filter>
+      <!-- Share to Excalibook: images go onto the canvas; drawings and
+           libraries by their Excalidraw types. -->
+      <intent-filter>
+        <action android:name="android.intent.action.SEND" />
+        <action android:name="android.intent.action.SEND_MULTIPLE" />
+        <category android:name="android.intent.category.DEFAULT" />
+        <data android:mimeType="image/*" />
+        <data android:mimeType="application/vnd.excalidraw+json" />
+        <data android:mimeType="application/vnd.excalidrawlib+json" />
+      </intent-filter>
+    </activity>
+  </application>
+</manifest>
