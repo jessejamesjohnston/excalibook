@@ -559,7 +559,15 @@ public class MainActivity extends Activity {
         }
         return false;
       }
-      // Links in drawings and Help's links go to the browser.
+      // Links in drawings and Help's links go to the browser. Only web and
+      // mail links leave the app, and a frame inside a drawing (an embed)
+      // needs a real tap: a crafted drawing must not fire intents on load.
+      String scheme = url.getScheme() == null ? "" : url.getScheme().toLowerCase(java.util.Locale.ROOT);
+      boolean web = scheme.equals("http") || scheme.equals("https") || scheme.equals("mailto");
+      if (!web || (!request.isForMainFrame() && !request.hasGesture())) {
+        Log.w(TAG, "blocked navigation to " + url.getScheme() + ": link");
+        return true;
+      }
       try {
         startActivity(new Intent(Intent.ACTION_VIEW, url).addCategory(Intent.CATEGORY_BROWSABLE));
       } catch (ActivityNotFoundException e) {
