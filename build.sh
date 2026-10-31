@@ -13,7 +13,7 @@
 #   ./build.sh         builds build/Excalibook.apk
 #
 # The release key is not in the repository: it lives in ~/.config/excalibook
-# (keystore.jks and keystore.pass; EXCALIBOOK_KEYS points elsewhere). Without
+# (keystore.jks; the password is typed or set in EXCALIBOOK_KEYSTORE_PASS; EXCALIBOOK_KEYS points elsewhere). Without
 # it the APK is signed with a test key kept in ~/.cache/excalibook, which is
 # fine for trying a build but can't update an Excalibook installed from a
 # release (and vice versa).
@@ -131,7 +131,14 @@ fi
 zipalign -f 4 $OUT/app.apk $OUT/aligned.apk
 KEYS=${EXCALIBOOK_KEYS:-$HOME/.config/excalibook}
 if [[ -f $KEYS/keystore.jks ]]; then
-  KS=$KEYS/keystore.jks PASS=file:$KEYS/keystore.pass
+  KS=$KEYS/keystore.jks PASS=env:EXCALIBOOK_KEYSTORE_PASS
+  # The password is never on disk (security audit 2026-10-31): agents on
+  # this VM can read any file here. EXCALIBOOK_KEYSTORE_PASS, else ask.
+  if [[ -z ${EXCALIBOOK_KEYSTORE_PASS:-} ]]; then
+    [[ -t 0 ]] || { echo "release signing needs the Excalibook keystore password: run this in a terminal, or set EXCALIBOOK_KEYSTORE_PASS" >&2; exit 1; }
+    read -rsp "Excalibook keystore password: " EXCALIBOOK_KEYSTORE_PASS; echo >&2
+  fi
+  export EXCALIBOOK_KEYSTORE_PASS
 else
   KS=$B/test-key.jks PASS=pass:test-key
   [[ -f $KS ]] || keytool -genkeypair -keystore "$KS" -storetype PKCS12 -storepass test-key -alias excalibook \
